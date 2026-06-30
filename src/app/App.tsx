@@ -189,10 +189,7 @@ function LandingPage({
           <div className="flex items-center gap-3">
             <button
               onClick={() => {
-                setView("student-login");
-                setAuthMode("login");
-                setAuthError("");
-                setAuthForm({ username: "", password: "", confirmPassword: "", studentId: "", yearLevel: "" });
+                onEnter();
               }}
               className="hidden md:flex items-center gap-1.5 bg-violet-700 hover:bg-violet-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
             >
@@ -215,10 +212,7 @@ function LandingPage({
             <a href="#stats" onClick={() => setMobileOpen(false)}>Stats</a>
             <button
               onClick={() => {
-                setView("student-login");
-                setAuthMode("login");
-                setAuthError("");
-                setAuthForm({ username: "", password: "", confirmPassword: "", studentId: "", yearLevel: "" });
+                onEnter();
                 setMobileOpen(false);
               }}
               className="flex items-center gap-1.5 bg-violet-700 text-white font-semibold px-4 py-2 rounded-lg w-fit"
@@ -254,10 +248,7 @@ function LandingPage({
               <div className="flex flex-wrap gap-4">
                 <button
                   onClick={() => {
-                    setView("student-login");
-                    setAuthMode("login");
-                    setAuthError("");
-                    setAuthForm({ username: "", password: "", confirmPassword: "", studentId: "", yearLevel: "" });
+                    onEnter();
                   }}
                   className="flex items-center gap-2 bg-white text-violet-800 hover:bg-violet-50 font-bold px-6 py-3 rounded-xl transition-all hover:scale-105 shadow-lg shadow-violet-900/30"
                 >
@@ -1340,7 +1331,10 @@ export default function App() {
     setAuthError("");
 
     const trimmedUsername = authForm.username.trim();
-    const emailValid = /^?[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedUsername);
+    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedUsername);
+    const authEmail = emailValid
+      ? trimmedUsername
+      : `${trimmedUsername.replace(/\s+/g, "").toLowerCase()}@bsis.local`;
 
     if (authMode === "register") {
       if (!trimmedUsername || !authForm.password || !authForm.confirmPassword || !authForm.studentId.trim() || !authForm.yearLevel.trim()) {
@@ -1472,8 +1466,10 @@ export default function App() {
     ? (
         <LandingPage
           onEnter={() => {
+            setView("student-login");
             setAuthMode("login");
             setAuthError("");
+            setAuthForm({ username: "", password: "", confirmPassword: "", studentId: "", yearLevel: "" });
           }}
           authMode={authMode}
           onSetAuthMode={setAuthMode}
